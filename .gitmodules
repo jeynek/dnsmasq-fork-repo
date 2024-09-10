@@ -1,0 +1,3 @@
+[submodule "dnsmasq-dhcp-server"]
+	path = dnsmasq-dhcp-server
+	url = https://github.com/f18m/ha-addon-dnsmasq-dhcp-server
