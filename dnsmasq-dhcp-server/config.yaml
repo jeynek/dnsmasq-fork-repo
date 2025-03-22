@@ -1,0 +1,119 @@
+---
+# inside feature branches it's handy to change the 'version' field to match the branch name
+# as reported by the Github Action workflow 'publish.yaml', so that you can force HomeAssistant
+# to use the docker image of that feature branch instead of the docker image of 'main', by pointing
+# HomeAssistant to that feature branch
+version: 3.0.0
+slug: dnsmasq-dhcp
+name: Dnsmasq-DHCP
+description: A DHCP server based on dnsmasq
+url: https://github.com/f18m/ha-addon-dnsmasq-dhcp-server/tree/main
+advanced: true
+arch:
+  - armhf
+  - armv7
+  - aarch64
+  - amd64
+  - i386
+host_network: true
+image: ghcr.io/f18m/{arch}-addon-dnsmasq-dhcp
+init: false
+ingress: true
+ingress_port: 8100
+panel_icon: mdi:ip-network-outline
+panel_title: DHCP
+options:
+  # see DOCS.md for all documentation
+  interfaces:
+    - enp1s0
+  dhcp_server:
+    default_lease: 1h
+    address_reservation_lease: 1h
+    reset_dhcp_lease_database_on_reboot: false
+    log_requests: true
+    dns_domain: lan
+    dns_servers:
+      - 0.0.0.0
+    ntp_servers:
+      - 0.europe.pool.ntp.org
+      - 1.europe.pool.ntp.org
+      - 2.europe.pool.ntp.org
+  dhcp_pools:
+    - interface: enp1s0
+      start: 192.168.1.50
+      end: 192.168.1.150
+      gateway: 192.168.1.254
+      netmask: 255.255.255.0
+    - interface: enp1s0
+      start: 192.168.1.220
+      end: 192.168.1.230
+      gateway: 192.168.1.254
+      netmask: 255.255.255.0
+  dhcp_ip_address_reservations:
+    - mac: aa:bb:cc:dd:ee:ff
+      name: "An-important-host-with-reserved-IP"
+      ip: 192.168.1.15
+      link: "http://{{ .ip }}/landing-page/for/this/host"
+  dhcp_clients_friendly_names:
+    - mac: dd:ee:aa:dd:bb:ee
+      name: "This is a friendly name to label this host, even if it gets a dynamic IP"
+      link: "http://{{ .ip }}/landing-page/for/this/host"
+  dns_server:
+    enable: true
+    port: 53
+    cache_size: 10000
+    log_requests: false
+    dns_domain: lan
+    upstream_servers:
+      - 8.8.8.8
+      - 8.8.4.4
+  web_ui:
+    log_activity: false
+    port: 8976
+schema:
+  interfaces:
+    # we expect a list of valid network interfaces; the character "@" which typically appears in
+    # veth pairs (used by docker) is not allowed on-purpose to avoid mistakes where the user
+    # provides a docker veth pair as interface for dnsmasq (this is typically not a good idea)
+    - match(^([a-z][a-z0-9\.:]*)$)
+  dhcp_server:
+    default_lease: str
+    address_reservation_lease: str
+    reset_dhcp_lease_database_on_reboot: bool
+    log_requests: bool
+    dns_servers:
+      - str
+    dns_domain: str
+    ntp_servers:
+      - str
+  dhcp_pools:
+    - interface: str
+      start: str
+      end: str
+      gateway: str
+      netmask: str
+  dhcp_ip_address_reservations:
+    - ip: str
+      mac: match(^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$)
+      # the name in this case must be a valid hostname as per RFC 1123 since it is passed to dnsmasq
+      # that will refuse to start if an invalid hostname format is used
+      name: match(^[a-zA-Z0-9\-.]*$)
+      link: "str?"
+  dhcp_clients_friendly_names:
+    - mac: match(^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$)
+      name: str
+      link: "str?"
+  dns_server:
+    enable: bool
+    port: int
+    cache_size: int
+    log_requests: bool
+    dns_domain: str
+    upstream_servers:
+      - str
+  web_ui:
+    log_activity: bool
+    port: int
+startup: system
+privileged:
+  - NET_ADMIN

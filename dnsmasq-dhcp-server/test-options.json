@@ -1,0 +1,74 @@
+{
+  "interfaces": [ "enp3s0" ],
+  "dhcp_ip_address_reservations": [
+    {
+      "mac": "aa:bb:cc:dd:ee:00",
+      "name": "static-ip-important-host",
+      "ip": "192.168.1.15",
+      "link": "https://{{ .ip }}/important-host-land-page"
+    },
+    {
+      "mac": "aa:bb:cc:dd:ee:01",
+      "name": "static-ip-within-dhcp-range",
+      "ip": "192.168.1.55",
+      "link": "https://{{ .ip }}/less-important"
+    }
+  ],
+  "dhcp_clients_friendly_names": [
+    {
+      "name": "a human-friendly name for a DHCP client with dynamic IP",
+      "mac": "4c:50:77:cf:3c:35",
+      "link": "https://{{ .ip }}/page-{{ .hostname }}"
+    }
+  ],
+  "dhcp_server": {
+    "default_lease": "12h",
+    "address_reservation_lease": "24h",
+    "log_requests": true,
+    "reset_dhcp_lease_database_on_reboot": false,
+    "dns_servers": [
+      "0.0.0.0", 
+      "8.8.8.8",
+      "8.8.4.4"
+    ],
+    "ntp_servers": [
+      "0.2.3.4",
+      "ntp.pool.org",
+      "0.europe.ntp.pool.org",
+      "1.europe.ntp.pool.org",
+      "2.europe.ntp.pool.org",
+      "1.2.3.4"
+    ]
+  },
+  "dhcp_pools": [
+    {
+      "interface": "enp3s0",
+      "start": "192.168.1.50",
+      "end": "192.168.1.100",
+      "gateway": "192.168.1.254",
+      "netmask": "255.255.255.0"
+      },
+    {
+      "interface": "enp3s1",
+      "start": "192.168.2.50",
+      "end": "192.168.2.100",
+      "gateway": "192.168.2.254",
+      "netmask": "255.255.255.0"
+    }
+  ],
+  "dns_server": {
+    "enable": true,
+    "port": 53,
+    "dns_domain": "lan",
+    "cache_size": 10000,
+    "log_requests": false,
+    "upstream_servers": [
+      "8.8.8.8",
+      "8.8.4.4"
+    ]
+  },
+  "web_ui": {
+    "log_requests": true,
+    "port": 8976
+  }
+}
