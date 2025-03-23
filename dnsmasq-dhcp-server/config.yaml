@@ -122,5 +122,5 @@ privileged:
 #    path: /usr/share
 map:
   - type: addon_config
-    path: /adddon
+    path: /usr/share/tempio
     read_only: False
