@@ -120,7 +120,7 @@ privileged:
 #map:
 #  - type: share
 #    path: /usr/share
-  map:
+map:
   - type: addon_config
-#	  path: /usr/share/tempio
+	  path: /adddon
 	  read_only: False
