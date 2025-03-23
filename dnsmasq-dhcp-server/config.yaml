@@ -117,3 +117,6 @@ schema:
 startup: system
 privileged:
   - NET_ADMIN
+map:
+  - type: addon_config
+    path: /usr/share/tempio
