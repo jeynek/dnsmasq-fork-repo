@@ -117,6 +117,10 @@ schema:
 startup: system
 privileged:
   - NET_ADMIN
-map:
-  - type: share
-    path: /usr/share
+#map:
+#  - type: share
+#    path: /usr/share
+  map:
+  - type: addon_config
+#	  path: /usr/share/tempio
+	  read_only: False
