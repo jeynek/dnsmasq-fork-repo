@@ -122,5 +122,5 @@ privileged:
 #    path: /usr/share
 map:
   - type: addon_config
-	  path: /adddon
-	  read_only: False
+    path: /adddon
+    read_only: False
